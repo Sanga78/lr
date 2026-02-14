@@ -1,100 +1,100 @@
-const heartBtn = document.getElementById('heartBtn');
-const modal = document.getElementById('modal');
-const messageEl = document.getElementById('message');
-const yes = document.getElementById('yes');
-const no = document.getElementById('no');
-const bgSlideshow = document.getElementById('bgSlideshow');
-const slideText = document.getElementById('slideText');
-const finalPage = document.getElementById('finalPage');
-const restart = document.getElementById('restart');
-const loveSong = document.getElementById('loveSong');
-const centerSection = document.querySelector('.center');
+const startBtn = document.getElementById("startBtn");
+const homePage = document.getElementById("homePage");
+const slideshowPage = document.getElementById("slideshowPage");
+const finalPage = document.getElementById("finalPage");
+const bgSlideshow = document.getElementById("bgSlideshow");
+const slideText = document.getElementById("slideText");
+const loveSong = document.getElementById("loveSong");
 
-let slidesData = [
-    { src: "images/1.jpeg", text: "From the moment I met you… ✨" },
-    { src: "images/2.jpeg", text: "My heart knew something special 💓" },
-    { src: "images/3.jpeg", text: "You are my peace in chaos 🌸" },
-    { src: "images/4.jpeg", text: "My smile begins with you 😊" },
-    { src: "images/5.jpeg", text: "And I choose you. Always. 💍" }
+let slides = [
+    { src: "images/1.jpeg", text: "You are my happiness 💖" },
+    { src: "images/2.jpeg", text: "Distance means nothing when love is real 💕" },
+    { src: "images/3.jpeg", text: "Every moment with you is special 💫" },
+    { src: "images/4.jpeg", text: "Happy Valentine’s Day my love ❤️" }
 ];
 
-let slideIndex = 0;
-let slideInterval;
-let slides = [];
-let visibleIndex = 0;
+let index = 0;
+let interval;
 
-heartBtn.addEventListener('click', () => {
-    modal.classList.remove('hidden');
-    typeMessage("You are the best thing that ever happened to me...");
-});
-
-function typeMessage(text){
-    messageEl.textContent = "";
-    let i = 0;
-    let interval = setInterval(()=>{
-        messageEl.textContent += text[i];
-        i++;
-        if(i >= text.length) clearInterval(interval);
-    }, 35);
-}
-
-yes.addEventListener('click', async ()=>{
-    modal.classList.add('hidden');
-    centerSection.style.display = "none";
-    await loveSong.play().catch(()=>{});
+startBtn.addEventListener("click", () => {
+    homePage.classList.add("hidden");
+    slideshowPage.classList.remove("hidden");
+    loveSong.play();
     startSlideshow();
 });
 
-no.addEventListener('click', ()=>{
-    modal.classList.add('hidden');
-});
+function startSlideshow() {
+    interval = setInterval(() => {
+        bgSlideshow.style.backgroundImage = `url(${slides[index].src})`;
+        slideText.textContent = slides[index].text;
+        index++;
 
-function createSlides(){
-    if(slides.length > 0) return;
-    for(let i=0;i<2;i++){
-        let div = document.createElement("div");
-        div.classList.add("bg-slide");
-        if(i===0) div.classList.add("visible");
-        bgSlideshow.appendChild(div);
-        slides.push(div);
+        if (index === slides.length) {
+            clearInterval(interval);
+            setTimeout(showFinal, 3000);
+        }
+    }, 4000);
+}
+
+function showFinal() {
+    slideshowPage.classList.add("hidden");
+    finalPage.classList.remove("hidden");
+    startFireworks();
+}
+
+/* Heart Fireworks */
+const canvas = document.getElementById("fireworksCanvas");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+let particles = [];
+
+function createHeart(x, y) {
+    for (let t = 0; t < Math.PI * 2; t += 0.2) {
+        let px = 16 * Math.pow(Math.sin(t), 3);
+        let py = -(13 * Math.cos(t) - 5 * Math.cos(2*t)
+                 - 2 * Math.cos(3*t) - Math.cos(4*t));
+        particles.push({
+            x: x,
+            y: y,
+            vx: px * 0.2,
+            vy: py * 0.2,
+            alpha: 1
+        });
     }
 }
 
-function showSlide(data){
-    let nextIndex = 1 - visibleIndex;
-
-    slides[nextIndex].style.backgroundImage = `url('${data.src}')`;
-    slides[nextIndex].classList.add("visible");
-    slides[visibleIndex].classList.remove("visible");
-
-    visibleIndex = nextIndex;
-
-    slideText.classList.remove("show");
-
-    setTimeout(()=>{
-        slideText.textContent = data.text;
-        slideText.classList.add("show");
-    }, 400);
+function startFireworks() {
+    setInterval(() => {
+        createHeart(
+            Math.random() * canvas.width,
+            Math.random() * canvas.height / 2
+        );
+    }, 1000);
+    animate();
 }
 
-function startSlideshow(){
-    createSlides();
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    showSlide(slidesData[slideIndex]);
-    slideIndex++;
+    particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.01;
 
-    slideInterval = setInterval(()=>{
-        showSlide(slidesData[slideIndex % slidesData.length]);
-        slideIndex++;
-    }, 3500);
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(p.x, p.y, 2, 2);
 
-    setTimeout(()=>{
-        clearInterval(slideInterval);
-        slideText.style.display = "none";
-        finalPage.classList.remove('hidden');
-    }, slidesData.length * 3500 + 1000);
+        if (p.alpha <= 0) particles.splice(i, 1);
+    });
+
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(animate);
 }
-
-restart.addEventListener("click", ()=>{
-    location.reload();
-});

@@ -1,42 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>For Someone Special(BECKY)</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Becky ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  
+    <!-- Floating Hearts -->
     <div class="hearts"></div>
-    <div id="bgSlideshow" class="bg-slideshow"></div>
 
- 
-    <div id="slideText" class="slide-text"></div>
+    <!-- Main Page -->
+    <main class="center" id="homePage">
+        <h1 class="headline glow">
+            Becky 💕
+        </h1>
 
-    <main class="center">
-        <h1 class="headline">Hey Babygirl 💕</h1>
-        <p class="lead">Click the heart...</p>
-        <button id="heartBtn" class="heart-btn">❤</button>
+        <p class="question">
+            Can I keep loving you forever? ❤️
+        </p>
+
+        <button id="startBtn" class="main-btn">
+            Tap Here 💖
+        </button>
     </main>
 
-    <div id="modal" class="modal hidden">
-        <div class="modal-card">
-            <p id="message" class="message"></p>
-            <div class="actions">
-                <button id="yes" class="btn yes">Yes 💖</button>
-                <button id="no" class="btn no">Maybe 😌</button>
-            </div>
-        </div>
+    <!-- Slideshow Page -->
+    <div id="slideshowPage" class="hidden">
+        <div id="bgSlideshow" class="bg-slideshow"></div>
+        <div id="slideText" class="slide-text"></div>
+        <div class="petals"></div>
     </div>
 
+    <!-- Final Page -->
     <div id="finalPage" class="final-page hidden">
+        <canvas id="fireworksCanvas"></canvas>
+
         <div class="final-card">
-            <p class="final-sub">“Miles apart, but never apart at heart. I choose you, every day.” 💫</p>
-            <h1 class="final-title">I Love You 💞</h1>
-            <button id="restart" class="btn love-btn">Becky</button>
+            <h1 class="final-title glow">
+                Happy Valentine’s Day My Love 💕
+            </h1>
+            <p class="final-sub">
+                Miles apart, but never apart at heart.
+                I choose you — today, tomorrow, always.
+            </p>
         </div>
     </div>
 
